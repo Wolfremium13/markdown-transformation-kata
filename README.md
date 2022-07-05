@@ -1,38 +1,44 @@
-# 🐍 Python TDD Boilerplate
+# Markdown transformation kata
 
-## 📝 Setup project
+The goal is to implement a command line tool that takes a markdown file and
+returns another markdown file, applying certain transformations to the text.
 
-- ### [Setup Pipenv 0 errors version](https://www.wolfremium.dev/blog/python-multiple-versions)
-- ### [Windows 10](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-local-programming-environment-on-windows-10)
-
-- ### [Make](https://es.wikipedia.org/wiki/Make)
-
-## 🗃️ Requirements
-
-- Python 3.10
-- Pipenv
-- Make
-
-## 🧑‍💻 Install project
-
-```bash
-make setup
+```
+$ markdown-transform link2footnote source.md destination.md
 ```
 
-## ❓Help
+The first transformation is to turn links into footnotes. The syntax of a link
+is this:
 
-```bash
-make help
+```
+[visible text link](url)
 ```
 
-## 🧐 References
+The syntax of a footnote is the following:
 
-- [UnitTest](https://docs.python.org/3/library/unittest.html)
-- [Pytest](https://docs.pytest.org/en/7.1.x/getting-started.html#get-started)
-- [Hypothesis](https://hypothesis.readthedocs.io/en/latest/quickstart.html)
-- [Intro to property-based testing in Python](https://www.freecodecamp.org/news/intro-to-property-based-testing-in-python-6321e0c2f8b/)
+```
+visible text link [^anchor1]
 
-## 💩 Troubleshooting
+[^anchor1]: url or text
+```
 
-- [Setup of the project from 0](https://sourcery.ai/blog/python-best-practices/)
-- [Select VSCode Interpreter (modules not found after installation)](https://code.visualstudio.com/docs/python/environments#_select-and-activate-an-environment)
+The goal is to make conversions like the following:
+
+Source:
+
+```
+[this book](https://codigosostenible.com) and some other text
+and some other text line.
+```
+
+Transformation:
+
+```
+this book [^anchor1] and some other text
+and some other text line.
+
+[^anchor1]: https://codigosostenible.com
+```
+
+There are multiple edge cases to consider: multiple links per line, several
+links sharing the same url...
