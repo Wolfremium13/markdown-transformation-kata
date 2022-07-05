@@ -17,11 +17,11 @@ class TestAnchorTransformations:
 
     def test_turn_paragraph_into_footnote(self):
         input_text = (
-            "[this book](https://codigosostenible.com) and some other text"
+            "[this book](https://codigosostenible.com) and some other text\n"
             "and some other text line."
         )
         expected_text = (
-            "this book [^this book1] and some other text"
+            "this book [^this book1] and some other text\n"
             "and some other text line."
             "\n\n"
             "[^this book1]: https://codigosostenible.com"

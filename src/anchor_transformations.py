@@ -1,5 +1,7 @@
 import re
 
+LINK_PATTERN = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+
 
 def turn_links_into_footnotes(text: str) -> str:
     result = []
@@ -12,21 +14,27 @@ def turn_links_into_footnotes(text: str) -> str:
 
 
 def _find_inline_links(paragraph: str) -> dict:
-    inline_link_pattern = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
-    links = dict(inline_link_pattern.findall(paragraph))
+    links = dict(LINK_PATTERN.findall(paragraph))
     return links
 
 
 def _transform_urls(paragraph: str, links: dict) -> str:
     result = []
     for line in paragraph.split("\n"):
-        for text_link, url in links.items():
-            line = line.replace(f"({url})", "")
-            number_of_anchor = list(links.keys()).index(text_link) + 1
-            line = line.replace(
-                f"[{text_link}]", f"{text_link} [^{text_link}{number_of_anchor}]")
+        if (re.search(LINK_PATTERN, line)):
+            result.append(_transform_link(links, line))
+        else:
             result.append(line)
-    return "".join(result)
+    return "\n".join(result)
+
+
+def _transform_link(links: dict, line: str) -> str:
+    for text_link, url in links.items():
+        line = line.replace(f"({url})", "")
+        number_of_anchor = list(links.keys()).index(text_link) + 1
+        line = line.replace(
+            f"[{text_link}]", f"{text_link} [^{text_link}{number_of_anchor}]")
+        return line
 
 
 def _append_anchors(paragraph: str, links: dict) -> str:
